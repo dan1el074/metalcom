@@ -1,0 +1,12 @@
+Options -Indexes
+RewriteEngine On
+
+# Protege o código da aplicação quando todo o projeto está dentro de public_html.
+RewriteRule ^(?:app|config|database)(?:/|$) - [F,L,NC]
+RewriteRule ^(?:\.env|README\.md)$ - [F,L,NC]
+RewriteRule ^public/ - [L]
+
+# Entrega os recursos públicos e direciona as páginas ao front controller.
+RewriteRule ^(assets|css|js|vendor|uploads)/(.*)$ public/$1/$2 [L,NC]
+RewriteRule ^ public/index.php [QSA,L]
+

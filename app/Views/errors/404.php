@@ -1,0 +1,1 @@
+<main id="conteudo" class="section"><div class="container empty-state"><span class="eyebrow">Erro 404</span><h1>Página não encontrada</h1><p>O endereço acessado não existe ou foi alterado.</p><a class="button button-primary" href="<?= url('/') ?>">Voltar ao início</a></div></main>

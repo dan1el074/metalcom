@@ -15,6 +15,27 @@ $path = '/' . trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/')
 $base = config('base_path') ?: '';
 if ($base && str_starts_with($path, $base)) $path = substr($path, strlen($base)) ?: '/';
 
+// Troque para true quando quiser ativar a página de manutenção.
+$maintenanceEnabled = false;
+
+if ($maintenanceEnabled) {
+    header('Cache-Control: private, no-store, max-age=0');
+
+    $user = \App\Core\Auth::user();
+    $authorized = $user && (int) $user['active'] === 1;
+    $accessRoute = in_array($path, ['/login', '/logout', '/admin'], true)
+        || str_starts_with($path, '/admin/');
+
+    if (!$authorized && !$accessRoute) {
+        http_response_code(503);
+        header('Retry-After: 3600');
+        header('X-Robots-Tag: noindex, nofollow');
+        header('Content-Type: text/html; charset=utf-8');
+        require ROOT_PATH . '/app/Views/maintenance.php';
+        exit;
+    }
+}
+
 $routes = [
     'GET' => [
         '/' => [HomeController::class, 'index'],

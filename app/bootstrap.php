@@ -66,6 +66,12 @@ function e(mixed $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+function emphasized_text(mixed $value, string $tag = 'strong'): string
+{
+    $tag = $tag === 'em' ? 'em' : 'strong';
+    return preg_replace('/\*([^*\r\n]+)\*/u', '<' . $tag . '>$1</' . $tag . '>', e($value)) ?? e($value);
+}
+
 function csrf_field(): string
 {
     return '<input type="hidden" name="_token" value="' . e($_SESSION['_token']) . '">';

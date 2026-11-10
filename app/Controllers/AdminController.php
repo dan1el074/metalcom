@@ -24,7 +24,7 @@ final class AdminController extends Controller
             'messages' => (int) $db->query('SELECT COUNT(*) FROM contact_submissions')->fetchColumn(),
             'unread' => (int) $db->query('SELECT COUNT(*) FROM contact_submissions WHERE read_at IS NULL')->fetchColumn(),
         ];
-        $products = $db->query('SELECT p.*, c.name AS category_name FROM products p JOIN categories c ON c.id = p.category_id ORDER BY p.sort_order, p.name')->fetchAll();
+        $products = $db->query('SELECT p.*, c.name AS category_name FROM products p JOIN categories c ON c.id = p.category_id ORDER BY c.name ASC, p.sort_order ASC, p.name ASC, p.id ASC')->fetchAll();
         $galleryRows = $db->query('SELECT id, product_id, image_path, alt_text, sort_order, featured FROM product_images ORDER BY product_id, sort_order, id')->fetchAll();
         $galleryByProduct = [];
         foreach ($galleryRows as $galleryRow) {
@@ -125,7 +125,7 @@ final class AdminController extends Controller
         Auth::requireLogin();
         $this->requireCsrf();
         $section = (string) ($_POST['home_section'] ?? '');
-        $sectionNames = ['hero' => 'Imagens do hero', 'products' => 'Nossos produtos', 'about' => 'Sobre a Metalcom', 'projects' => 'Projetos especiais'];
+        $sectionNames = ['hero_text' => 'Textos do destaque principal', 'hero' => 'Imagens do hero', 'products' => 'Nossos produtos', 'about' => 'Sobre a Metalcom', 'projects' => 'Projetos especiais'];
         if (!isset($sectionNames[$section])) {
             flash('error', 'Selecione uma seção válida da página inicial.');
             $this->redirect('/admin#configuracoes-home');
@@ -135,7 +135,13 @@ final class AdminController extends Controller
             $db->beginTransaction();
             $currentSettings = Content::settings();
             $updatedSettings = [];
-            if ($section === 'hero') {
+            if ($section === 'hero_text') {
+                $updatedSettings['hero_title'] = trim((string) ($_POST['hero_title'] ?? ''));
+                $updatedSettings['hero_description'] = trim((string) ($_POST['hero_description'] ?? ''));
+                if ($updatedSettings['hero_title'] === '') {
+                    throw new \RuntimeException('Informe o título do destaque principal.');
+                }
+            } elseif ($section === 'hero') {
                 $heroFallbacks = [1 => 'assets/hero-reboque-cavalo.png', 2 => 'uploads/9c29e64ae3fe63a24e34c493891174f5.png', 3 => 'assets/hero-calefator-ambiente-v2.png'];
                 foreach ($heroFallbacks as $index => $fallback) {
                     $field = 'hero_image_' . $index;

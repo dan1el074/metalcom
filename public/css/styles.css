@@ -1805,8 +1805,7 @@ summary,
 }
 
 .product-detail-copy {
-  position: sticky;
-  top: calc(var(--header-h) + 30px);
+  position: static;
 }
 
 .product-detail-copy h1 {
@@ -2600,8 +2599,7 @@ th {
 }
 
 .admin-modal::backdrop {
-  background: rgba(12, 19, 15, 0.65);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .admin-modal form {

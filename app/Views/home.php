@@ -17,8 +17,8 @@
     </button>
     <div class="container home-hero-content">
       <div class="home-hero-copy reveal">
-        <h1>Qualidade que <em>aquece</em>, confiança que <em>dura</em>.</h1>
-        <p>Soluções em metal com excelência em cada detalhe.</p><a class="button button-primary"
+        <h1><?= emphasized_text($settings['hero_title'] ?? 'Qualidade que *aquece*, confiança que *dura*.', 'em') ?></h1>
+        <p><?= e($settings['hero_description'] ?? 'Soluções em metal com excelência em cada detalhe.') ?></p><a class="button button-primary"
           href="<?= url('/produtos') ?>">Conheça nossos produtos <span aria-hidden="true">→</span></a>
       </div>
       <div class="home-hero-dots" aria-label="Selecionar imagem do destaque"></div>

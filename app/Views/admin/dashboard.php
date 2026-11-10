@@ -23,14 +23,16 @@
       <table>
         <thead>
           <tr>
-            <th>Produto</th>
-            <th>Categoria</th>
+            <th scope="col" title="ID do produto">#</th>
+            <th scope="col">Produto</th>
+            <th scope="col" aria-sort="ascending" title="Ordenado por categoria: A a Z">Categoria <span aria-hidden="true">↓</span></th>
             <th>Status</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody><?php foreach ($products as $item): ?>
             <tr>
+              <td><?= e($item['id']) ?></td>
               <td>
                 <div class="table-product"><img src="<?= asset($item['image_path']) ?>"
                     alt=""><strong><?= e($item['name']) ?></strong></div>
@@ -64,7 +66,7 @@
                 <option value="<?= $category['id'] ?>"><?= e($category['name']) ?></option><?php endforeach; ?>
             </select></label><label>Código<input name="code" data-product-code></label><label
             class="modal-span">Descrição<textarea name="description" rows="4" data-product-description
-              required></textarea></label><input type="hidden" name="sort_order" value="0"
+              required></textarea><small>Use *asteriscos* para exibir um trecho em negrito.</small></label><input type="hidden" name="sort_order" value="0"
               data-product-order><label class="checkbox-label"><input type="checkbox" name="active"
               data-product-active checked> Produto ativo</label>
           <div class="modal-span product-main-image-admin">
@@ -147,6 +149,19 @@
       </div>
     </div>
     <div class="settings-form">
+    <form class="settings-form" action="<?= url('/admin/home') ?>" method="post">
+      <?= csrf_field() ?>
+      <input type="hidden" name="home_section" value="hero_text">
+      <fieldset class="settings-group">
+        <legend>Textos do destaque principal</legend>
+        <div class="repeatable-heading"><p>Use *asteriscos* no título para destacar palavras em verde.</p></div>
+        <div class="settings-grid">
+          <label class="field-wide">Título<input name="hero_title" value="<?= e($settings['hero_title'] ?? 'Qualidade que *aquece*, confiança que *dura*.') ?>" required></label>
+          <label class="field-wide">Texto<textarea name="hero_description" rows="3"><?= e($settings['hero_description'] ?? 'Soluções em metal com excelência em cada detalhe.') ?></textarea></label>
+        </div>
+        <div class="settings-actions"><button class="button button-primary" type="submit">Salvar</button></div>
+      </fieldset>
+    </form>
     <form class="settings-form" action="<?= url('/admin/home') ?>" method="post" enctype="multipart/form-data">
       <?= csrf_field() ?>
       <input type="hidden" name="home_section" value="hero">

@@ -1264,8 +1264,8 @@ html:has(> .dashboard-page) {
   scrollbar-gutter: stable;
 }
 
-html:has(.dashboard-page .admin-modal[open]),
-.dashboard-page:has(.admin-modal[open]) {
+/* Bloqueia só a raiz: overflow no body muda o ancestral dos elementos sticky. */
+html:has(.dashboard-page .admin-modal[open]) {
   overflow: hidden;
   overscroll-behavior: none;
 }
@@ -2322,6 +2322,14 @@ html[data-theme="dark"] .dashboard-page .hero-image-field {
 
 .home-page .home-hero {
   min-height: clamp(520px, calc(100svh - var(--header-h) - 132px), 720px);
+}
+
+@media (min-width: 981px) {
+  .product-gallery {
+    position: sticky;
+    top: calc(var(--header-h) + 64px);
+    align-self: start;
+  }
 }
 
 .home-page .trust-strip-grid {
